@@ -56,7 +56,7 @@ namespace YooAsset.Editor
         public string EncryptedFilePath { set; get; }
         #endregion
 
-        private readonly HashSet<string> _assetPaths = new HashSet<string>(1000);
+        private readonly HashSet<string> _assetPaths = new HashSet<string>();
 
         /// <summary>
         /// 参与构建的资源列表
