@@ -1,4 +1,4 @@
-﻿#if UNITY_WEBGL && WEIXINMINIGAME
+﻿#if UNITY_WEBGL && WECHAT_MINI_GAME
 using YooAsset;
 
 internal class WXFSLoadPackageManifestOperation : FSLoadPackageManifestOperation
