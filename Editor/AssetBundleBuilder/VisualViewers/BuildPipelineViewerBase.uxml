@@ -10,5 +10,6 @@
         <ui:TextField picking-mode="Ignore" label="Copy Buildin File Param" name="CopyBuildinFileParam" />
         <ui:VisualElement name="ExtensionContainer" />
         <ui:Button text="Click Build" display-tooltip-when-elided="true" name="Build" style="height: 50px; background-color: rgb(40, 106, 42); margin-top: 10px;" />
+        <ui:Button text="生成新版本号" display-tooltip-when-elided="true" name="BuildNewVersionNumber" style="height: 50px; background-color: rgb(40, 106, 42); margin-top: 10px;" />
     </ui:VisualElement>
 </ui:UXML>
