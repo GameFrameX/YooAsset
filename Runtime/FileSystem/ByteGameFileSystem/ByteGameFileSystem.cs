@@ -6,7 +6,7 @@ using StarkSDKSpace;
 
 public static class ByteGameFileSystemCreater
 {
-    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices)
+    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices = null)
     {
         string fileSystemClass = typeof(ByteGameFileSystem).FullName;
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
@@ -14,7 +14,7 @@ public static class ByteGameFileSystemCreater
         return fileSystemParams;
     }
 
-    public static FileSystemParameters CreateByteGameFileSystemParameters(string buildinPackRoot = "")
+    public static FileSystemParameters CreateByteGameFileSystemParameters(string buildinPackRoot)
     {
         string fileSystemClass = typeof(ByteGameFileSystem).FullName;
         IRemoteServices remoteServices = new ByteGameFileSystem.WebRemoteServices(buildinPackRoot);
