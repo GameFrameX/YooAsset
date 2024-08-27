@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace YooAsset
 {
@@ -25,11 +26,11 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Log(info);
+                Logger.Log(GetTime() + info);
             }
             else
             {
-                UnityEngine.Debug.Log(info);
+                UnityEngine.Debug.Log(GetTime() + info);
             }
         }
 
@@ -40,11 +41,11 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Warning(info);
+                Logger.Warning(GetTime() + info);
             }
             else
             {
-                UnityEngine.Debug.LogWarning(info);
+                UnityEngine.Debug.LogWarning(GetTime() + info);
             }
         }
 
@@ -55,12 +56,17 @@ namespace YooAsset
         {
             if (Logger != null)
             {
-                Logger.Error(info);
+                Logger.Error(GetTime() + info);
             }
             else
             {
-                UnityEngine.Debug.LogError(info);
+                UnityEngine.Debug.LogError(GetTime() + info);
             }
+        }
+
+        private static string GetTime()
+        {
+            return $"[YooAsset]:[{DateTime.Now:HH:mm:ss.fff}]:";
         }
 
         /// <summary>
