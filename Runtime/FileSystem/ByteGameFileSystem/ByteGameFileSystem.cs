@@ -1,4 +1,4 @@
-﻿#if UNITY_WEBGL
+﻿#if UNITY_WEBGL && DOUYIN_MINI_GAME
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
@@ -6,9 +6,18 @@ using StarkSDKSpace;
 
 public static class ByteGameFileSystemCreater
 {
-    public static FileSystemParameters CreateWechatFileSystemParameters(IRemoteServices remoteServices)
+    public static FileSystemParameters CreateByteGameFileSystemParameters(IRemoteServices remoteServices)
     {
-        string fileSystemClass = $"{nameof(ByteGameFileSystem)},YooAsset.RuntimeExtension";
+        string fileSystemClass = typeof(ByteGameFileSystem).FullName;
+        var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
+        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        return fileSystemParams;
+    }
+
+    public static FileSystemParameters CreateByteGameFileSystemParameters(string buildinPackRoot = "")
+    {
+        string fileSystemClass = typeof(ByteGameFileSystem).FullName;
+        IRemoteServices remoteServices = new ByteGameFileSystem.WebRemoteServices(buildinPackRoot);
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
         fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
         return fileSystemParams;
@@ -21,7 +30,7 @@ public static class ByteGameFileSystemCreater
 /// </summary>
 internal class ByteGameFileSystem : IFileSystem
 {
-    private class WebRemoteServices : IRemoteServices
+    public class WebRemoteServices : IRemoteServices
     {
         private readonly string _webPackageRoot;
         protected readonly Dictionary<string, string> _mapping = new Dictionary<string, string>(10000);

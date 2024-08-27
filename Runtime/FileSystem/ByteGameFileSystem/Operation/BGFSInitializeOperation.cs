@@ -1,4 +1,4 @@
-﻿#if UNITY_WEBGL
+﻿#if UNITY_WEBGL && DOUYIN_MINI_GAME
 using YooAsset;
 
 internal partial class BGFSInitializeOperation : FSInitializeFileSystemOperation
