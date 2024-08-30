@@ -15,6 +15,11 @@ namespace YooAsset
             _callback?.Invoke(this);
         }
 
+        internal override void InvokeUpdateCallback()
+        {
+            
+        }
+
         /// <summary>
         /// 完成委托
         /// </summary>

@@ -9,8 +9,10 @@ namespace YooAsset
     public abstract class AsyncOperationBase : IEnumerator, IComparable<AsyncOperationBase>
     {
         private Action<AsyncOperationBase> _callback;
+        private Action<AsyncOperationBase> _updatingCallback;
         private string _packageName = null;
         private int _whileFrame = 1000;
+        private float _progress = 0;
 
         /// <summary>
         /// 是否已经完成
@@ -35,17 +37,37 @@ namespace YooAsset
         /// <summary>
         /// 处理进度
         /// </summary>
-        public float Progress { get; protected set; }
+        public float Progress
+        {
+            get { return _progress; }
+            protected set
+            {
+                _progress = value;
+                _updatingCallback?.Invoke(this);
+            }
+        }
 
         /// <summary>
         /// 是否已经完成
         /// </summary>
         public bool IsDone
         {
-            get
+            get { return Status == EOperationStatus.Failed || Status == EOperationStatus.Succeed; }
+        }
+
+        /// <summary>
+        /// 完成事件
+        /// </summary>
+        public event Action<AsyncOperationBase> Update
+        {
+            add
             {
-                return Status == EOperationStatus.Failed || Status == EOperationStatus.Succeed;
+                if (IsDone)
+                    value.Invoke(this);
+                else
+                    _updatingCallback += value;
             }
+            remove { _updatingCallback -= value; }
         }
 
         /// <summary>
@@ -60,10 +82,7 @@ namespace YooAsset
                 else
                     _callback += value;
             }
-            remove
-            {
-                _callback -= value;
-            }
+            remove { _callback -= value; }
         }
 
         /// <summary>
@@ -79,15 +98,18 @@ namespace YooAsset
                     if (IsDone)
                         _taskCompletionSource.SetResult(null);
                 }
+
                 return _taskCompletionSource.Task;
             }
         }
 
         internal abstract void InternalOnStart();
         internal abstract void InternalOnUpdate();
+
         internal virtual void InternalOnAbort()
         {
         }
+
         internal virtual void InternalWaitForAsyncComplete()
         {
             throw new System.NotImplementedException(this.GetType().Name);
@@ -97,15 +119,18 @@ namespace YooAsset
         {
             return _packageName;
         }
+
         internal void SetPackageName(string packageName)
         {
             _packageName = packageName;
         }
+
         internal void SetStart()
         {
             Status = EOperationStatus.Processing;
             InternalOnStart();
         }
+
         internal void SetFinish()
         {
             IsFinish = true;
@@ -119,6 +144,7 @@ namespace YooAsset
             if (_taskCompletionSource != null)
                 _taskCompletionSource.TrySetResult(null);
         }
+
         internal void SetAbort()
         {
             if (IsDone == false)
@@ -149,6 +175,7 @@ namespace YooAsset
                     YooLogger.Error(Error);
                 }
             }
+
             return IsDone;
         }
 
@@ -172,23 +199,29 @@ namespace YooAsset
         }
 
         #region 排序接口实现
+
         public int CompareTo(AsyncOperationBase other)
         {
             return other.Priority.CompareTo(this.Priority);
         }
+
         #endregion
 
         #region 异步编程相关
+
         bool IEnumerator.MoveNext()
         {
             return !IsDone;
         }
+
         void IEnumerator.Reset()
         {
         }
+
         object IEnumerator.Current => null;
 
         private TaskCompletionSource<object> _taskCompletionSource;
+
         #endregion
     }
 }

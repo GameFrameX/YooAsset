@@ -17,10 +17,7 @@ namespace YooAsset
         /// </summary>
         public LoadSceneMode SceneMode
         {
-            get
-            {
-                return LoadSceneParams.loadSceneMode;
-            }
+            get { return LoadSceneParams.loadSceneMode; }
         }
 
         public BundledSceneProvider(ResourceManager manager, string providerGUID, AssetInfo assetInfo, LoadSceneParameters loadSceneParams, bool suspendLoad) : base(manager, providerGUID, assetInfo)
@@ -29,10 +26,12 @@ namespace YooAsset
             SceneName = Path.GetFileNameWithoutExtension(assetInfo.AssetPath);
             _suspendLoadMode = suspendLoad;
         }
+
         internal override void InternalOnStart()
         {
             DebugBeginRecording();
         }
+
         internal override void InternalOnUpdate()
         {
             if (IsDone)
@@ -53,12 +52,14 @@ namespace YooAsset
 
                 if (LoadDependBundleFileOp.Status != EOperationStatus.Succeed)
                 {
+                    InvokeUpdateCompletion();
                     InvokeCompletion(LoadDependBundleFileOp.Error, EOperationStatus.Failed);
                     return;
                 }
 
                 if (LoadBundleFileOp.Status != EOperationStatus.Succeed)
                 {
+                    InvokeUpdateCompletion();
                     InvokeCompletion(LoadBundleFileOp.Error, EOperationStatus.Failed);
                     return;
                 }
@@ -74,6 +75,7 @@ namespace YooAsset
                     // 注意：场景同步加载方法不会立即加载场景，而是在下一帧加载。
                     SceneObject = SceneManager.LoadScene(MainAssetInfo.AssetPath, LoadSceneParams);
                     _steps = ESteps.Checking;
+                    InvokeUpdateCompletion();
                 }
                 else
                 {
@@ -84,6 +86,7 @@ namespace YooAsset
                     {
                         _asyncOperation.allowSceneActivation = !_suspendLoadMode;
                         _asyncOperation.priority = 100;
+                        InvokeUpdateCompletion();
                         SceneObject = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
                         _steps = ESteps.Checking;
                     }
@@ -91,6 +94,7 @@ namespace YooAsset
                     {
                         string error = $"Failed to load scene : {MainAssetInfo.AssetPath}";
                         YooLogger.Error(error);
+                        InvokeUpdateCompletion();
                         InvokeCompletion(error, EOperationStatus.Failed);
                     }
                 }
@@ -112,23 +116,30 @@ namespace YooAsset
                         if (_asyncOperation.allowSceneActivation == false)
                         {
                             if (_suspendLoadMode == false)
+                            {
                                 _asyncOperation.allowSceneActivation = true;
+                            }
                         }
 
                         Progress = _asyncOperation.progress;
+                        InvokeUpdateCompletion();
                         if (_asyncOperation.isDone == false)
+                        {
                             return;
+                        }
                     }
                 }
 
                 if (SceneObject.IsValid())
                 {
+                    InvokeUpdateCompletion();
                     InvokeCompletion(string.Empty, EOperationStatus.Succeed);
                 }
                 else
                 {
                     string error = $"The loaded scene is invalid : {MainAssetInfo.AssetPath}";
                     YooLogger.Error(error);
+                    InvokeUpdateCompletion();
                     InvokeCompletion(error, EOperationStatus.Failed);
                 }
             }

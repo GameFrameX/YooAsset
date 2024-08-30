@@ -130,6 +130,7 @@ namespace YooAsset
                 LoadBundleFileOp.Release();
                 LoadBundleFileOp = null;
             }
+
             if (LoadDependBundleFileOp != null)
             {
                 LoadDependBundleFileOp.Release();
@@ -239,6 +240,28 @@ namespace YooAsset
         }
 
         /// <summary>
+        /// 更新流程
+        /// </summary>
+        protected void InvokeUpdateCompletion()
+        {
+            List<HandleBase> tempers = new List<HandleBase>(_handles);
+            foreach (var hande in tempers)
+            {
+                if (hande.IsValid)
+                {
+                    try
+                    {
+                        hande.InvokeUpdateCallback();
+                    }
+                    catch (Exception e)
+                    {
+                        YooLogger.Exception(e);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取下载报告
         /// </summary>
         public DownloadStatus GetDownloadStatus()
@@ -261,6 +284,7 @@ namespace YooAsset
         }
 
         #region 调试信息相关
+
         /// <summary>
         /// 出生的场景
         /// </summary>
@@ -282,9 +306,10 @@ namespace YooAsset
         [Conditional("DEBUG")]
         public void InitSpawnDebugInfo()
         {
-            SpawnScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name; ;
+            SpawnScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
             SpawnTime = SpawnTimeToString(UnityEngine.Time.realtimeSinceStartup);
         }
+
         private string SpawnTimeToString(float spawnTime)
         {
             float h = UnityEngine.Mathf.FloorToInt(spawnTime / 3600f);
@@ -325,6 +350,7 @@ namespace YooAsset
 
             LoadDependBundleFileOp.GetBundleDebugInfos(output);
         }
+
         #endregion
     }
 }

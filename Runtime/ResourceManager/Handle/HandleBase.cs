@@ -13,7 +13,9 @@ namespace YooAsset
             Provider = provider;
             _assetInfo = provider.MainAssetInfo;
         }
+
         internal abstract void InvokeCallback();
+        internal abstract void InvokeUpdateCallback();
 
         /// <summary>
         /// 是否成功
@@ -40,6 +42,7 @@ namespace YooAsset
             {
                 return DownloadStatus.CreateDefaultStatus();
             }
+
             return Provider.GetDownloadStatus();
         }
 
@@ -80,6 +83,22 @@ namespace YooAsset
                 if (IsValidWithWarning == false)
                     return 0;
                 return Provider.Progress;
+            }
+        }
+
+        /// <summary>
+        /// 加载时长
+        /// </summary>
+        public float Duration
+        {
+            get
+            {
+                if (IsValidWithWarning == false)
+                {
+                    return 0;
+                }
+
+                return Provider.LoadingTime;
             }
         }
 
@@ -144,6 +163,7 @@ namespace YooAsset
         }
 
         #region 异步操作相关
+
         /// <summary>
         /// 异步操作任务
         /// </summary>
@@ -157,13 +177,16 @@ namespace YooAsset
         {
             return !IsDone;
         }
+
         void IEnumerator.Reset()
         {
         }
+
         object IEnumerator.Current
         {
             get { return Provider; }
         }
+
         #endregion
     }
 }

@@ -10,9 +10,14 @@ namespace YooAsset
         internal SubAssetsHandle(ProviderOperation provider) : base(provider)
         {
         }
+
         internal override void InvokeCallback()
         {
             _callback?.Invoke(this);
+        }
+
+        internal override void InvokeUpdateCallback()
+        {
         }
 
         /// <summary>
@@ -113,6 +118,7 @@ namespace YooAsset
                 if (retObject != null)
                     ret.Add(retObject);
             }
+
             return ret.ToArray();
         }
     }

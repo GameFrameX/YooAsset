@@ -5,14 +5,53 @@ namespace YooAsset
     public class SceneHandle : HandleBase
     {
         private System.Action<SceneHandle> _callback;
+        private System.Action<SceneHandle> _updateCallback;
         internal string PackageName { set; get; }
 
         internal SceneHandle(ProviderOperation provider) : base(provider)
         {
         }
+
+        internal override void InvokeUpdateCallback()
+        {
+            _updateCallback?.Invoke(this);
+        }
+
         internal override void InvokeCallback()
         {
             _callback?.Invoke(this);
+        }
+
+        /// <summary>
+        /// 更新委托
+        /// </summary>
+        public event System.Action<SceneHandle> Update
+        {
+            add
+            {
+                if (IsValidWithWarning == false)
+                {
+                    throw new System.Exception($"{nameof(SceneHandle)} is invalid !");
+                }
+
+                if (Provider.IsDone)
+                {
+                    value.Invoke(this);
+                }
+                else
+                {
+                    _updateCallback += value;
+                }
+            }
+            remove
+            {
+                if (IsValidWithWarning == false)
+                {
+                    throw new System.Exception($"{nameof(SceneHandle)} is invalid !");
+                }
+
+                _updateCallback -= value;
+            }
         }
 
         /// <summary>
@@ -73,6 +112,7 @@ namespace YooAsset
             }
         }
 
+
         /// <summary>
         /// 激活场景（当同时存在多个场景时用于切换激活场景）
         /// </summary>
@@ -114,6 +154,7 @@ namespace YooAsset
             {
                 throw new System.NotImplementedException();
             }
+
             return true;
         }
 
