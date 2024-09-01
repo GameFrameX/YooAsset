@@ -1,185 +1,220 @@
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace YooAsset
 {
     /// <summary>
     /// 防止代码运行时发生裁剪报错。将这个脚本添加到启动场景中。不会对逻辑有任何影响
     /// </summary>
-    public class YooAssetCroppingHelper : MonoBehaviour
+    [Preserve]
+    [DisallowMultipleComponent]
+    public sealed class YooAssetCroppingHelper : MonoBehaviour
     {
+        private System.Type[] _types;
+
+        [Preserve]
         void Start()
         {
-            /*_ = typeof(YooAsset.CacheFileInfo);
-            _ = typeof(YooAsset.CacheHelper);
-            _ = typeof(YooAsset.CacheManager);
-            _ = typeof(YooAsset.EVerifyLevel);
-            _ = typeof(YooAsset.EVerifyResult);
-            _ = typeof(YooAsset.ClearAllCacheFilesOperation);
-            _ = typeof(YooAsset.ClearUnusedCacheFilesOperation);
-            _ = typeof(YooAsset.FindCacheFilesOperation);
-            _ = typeof(YooAsset.VerifyCacheFilesOperation);
-            _ = typeof(YooAsset.VerifyCacheFilesWithThreadOperation);
-            _ = typeof(YooAsset.VerifyCacheFilesWithoutThreadOperation);
-            _ = typeof(YooAsset.VerifyTempFileOperation);
-            _ = typeof(YooAsset.VerifyTempFileWithThreadOperation);
-            _ = typeof(YooAsset.VerifyTempFileWithoutThreadOperation);
-            _ = typeof(YooAsset.PackageCachingOperation);
-            _ = typeof(YooAsset.PersistentHelper);
-            _ = typeof(YooAsset.PersistentManager);
-            _ = typeof(YooAsset.VerifyCacheFileElement);
-            _ = typeof(YooAsset.VerifyTempFileElement);
-            _ = typeof(YooAsset.DebugBundleInfo);
-            _ = typeof(YooAsset.DebugPackageData);
-            _ = typeof(YooAsset.DebugProviderInfo);
-            _ = typeof(YooAsset.DebugReport);
-            _ = typeof(YooAsset.ERemoteCommand);
-            _ = typeof(YooAsset.RemoteCommand);
-            _ = typeof(YooAsset.RemoteDebuggerDefine);
-            _ = typeof(YooAsset.RemoteDebuggerInRuntime);
-            _ = typeof(YooAsset.DownloadRequestDelegate);
-            _ = typeof(YooAsset.DownloadHelper);
-            _ = typeof(YooAsset.DownloadManager);
-            _ = typeof(YooAsset.DownloadStatus);
-            _ = typeof(YooAsset.CompletedDownloader);
-            _ = typeof(YooAsset.DownloaderBase);
-            _ = typeof(YooAsset.FileDownloader);
-            _ = typeof(YooAsset.WebDownloader);
-            _ = typeof(YooAsset.RequestHelper);
-            _ = typeof(YooAsset.AssetBundleWebRequest);
-            _ = typeof(YooAsset.DownloadHandlerFileRange);
-            _ = typeof(YooAsset.FileGeneralRequest);
-            _ = typeof(YooAsset.FileResumeRequest);
-            _ = typeof(YooAsset.ERequestStatus);
-            _ = typeof(YooAsset.IWebRequester);
-            _ = typeof(YooAsset.ThreadSyncContext);
-            _ = typeof(YooAsset.UnityWebDataRequester);
-            _ = typeof(YooAsset.UnityWebFileRequester);
-            _ = typeof(YooAsset.UnityWebRequesterBase);
-            _ = typeof(YooAsset.EDefaultBuildPipeline);
-            _ = typeof(YooAsset.EPlayMode);
-            _ = typeof(YooAsset.InitializeParameters);
-            _ = typeof(YooAsset.EditorSimulateModeParameters);
-            _ = typeof(YooAsset.OfflinePlayModeParameters);
-            _ = typeof(YooAsset.HostPlayModeParameters);
-            _ = typeof(YooAsset.WebPlayModeParameters);
-            _ = typeof(YooAsset.AsyncOperationBase);
-            _ = typeof(YooAsset.EOperationStatus);
-            _ = typeof(YooAsset.GameAsyncOperation);
-            _ = typeof(YooAsset.OperationSystem);
-            _ = typeof(YooAsset.AllAssetsHandle);
-            _ = typeof(YooAsset.AssetHandle);
-            _ = typeof(YooAsset.HandleBase);
-            _ = typeof(YooAsset.RawFileHandle);
-            _ = typeof(YooAsset.SceneHandle);
-            _ = typeof(YooAsset.SubAssetsHandle);
-            _ = typeof(YooAsset.AssetBundleFileLoader);
-            _ = typeof(YooAsset.AssetBundleWebLoader);
-            _ = typeof(YooAsset.BundleLoaderBase);
-            _ = typeof(YooAsset.DependAssetBundles);
-            _ = typeof(YooAsset.RawBundleFileLoader);
-            _ = typeof(YooAsset.RawBundleWebLoader);
-            _ = typeof(YooAsset.VirtualBundleFileLoader);
-            _ = typeof(YooAsset.InstantiateOperation);
-            _ = typeof(YooAsset.UnloadSceneOperation);
-            _ = typeof(YooAsset.BundledAllAssetsProvider);
-            _ = typeof(YooAsset.BundledAssetProvider);
-            _ = typeof(YooAsset.BundledRawFileProvider);
-            _ = typeof(YooAsset.BundledSceneProvider);
-            _ = typeof(YooAsset.BundledSubAssetsProvider);
-            _ = typeof(YooAsset.CompletedProvider);
-            _ = typeof(YooAsset.DatabaseAllAssetsProvider);
-            _ = typeof(YooAsset.DatabaseAssetProvider);
-            _ = typeof(YooAsset.DatabaseRawFileProvider);
-            _ = typeof(YooAsset.DatabaseSceneProvider);
-            _ = typeof(YooAsset.DatabaseSubAssetsProvider);
-            _ = typeof(YooAsset.ProviderBase);
-            _ = typeof(YooAsset.ResourceLoader);
-            _ = typeof(YooAsset.ResourceManager);
-            _ = typeof(YooAsset.AssetInfo);
-            _ = typeof(YooAsset.BundleInfo);
-            _ = typeof(YooAsset.IBundleQuery);
-            _ = typeof(YooAsset.IPlayMode);
-            _ = typeof(YooAsset.ManifestTools);
-            _ = typeof(YooAsset.DownloaderOperation);
-            _ = typeof(YooAsset.ResourceDownloaderOperation);
-            _ = typeof(YooAsset.ResourceUnpackerOperation);
-            _ = typeof(YooAsset.ResourceImporterOperation);
-            _ = typeof(YooAsset.InitializationOperation);
-            _ = typeof(YooAsset.EditorSimulateModeInitializationOperation);
-            _ = typeof(YooAsset.OfflinePlayModeInitializationOperation);
-            _ = typeof(YooAsset.HostPlayModeInitializationOperation);
-            _ = typeof(YooAsset.WebPlayModeInitializationOperation);
-            _ = typeof(YooAsset.AppFootPrint);
-            _ = typeof(YooAsset.DeserializeManifestOperation);
-            _ = typeof(YooAsset.DownloadManifestOperation);
-            _ = typeof(YooAsset.LoadBuildinManifestOperation);
-            _ = typeof(YooAsset.LoadCacheManifestOperation);
-            _ = typeof(YooAsset.LoadEditorManifestOperation);
-            _ = typeof(YooAsset.LoadRemoteManifestOperation);
-            _ = typeof(YooAsset.QueryBuildinPackageVersionOperation);
-            _ = typeof(YooAsset.QueryCachePackageHashOperation);
-            _ = typeof(YooAsset.QueryCachePackageVersionOperation);
-            _ = typeof(YooAsset.QueryRemotePackageHashOperation);
-            _ = typeof(YooAsset.QueryRemotePackageVersionOperation);
-            _ = typeof(YooAsset.UnpackBuildinManifestOperation);
-            _ = typeof(YooAsset.PreDownloadContentOperation);
-            _ = typeof(YooAsset.EditorPlayModePreDownloadContentOperation);
-            _ = typeof(YooAsset.OfflinePlayModePreDownloadContentOperation);
-            _ = typeof(YooAsset.HostPlayModePreDownloadContentOperation);
-            _ = typeof(YooAsset.WebPlayModePreDownloadContentOperation);
-            _ = typeof(YooAsset.UpdatePackageManifestOperation);
-            _ = typeof(YooAsset.EditorPlayModeUpdatePackageManifestOperation);
-            _ = typeof(YooAsset.OfflinePlayModeUpdatePackageManifestOperation);
-            _ = typeof(YooAsset.HostPlayModeUpdatePackageManifestOperation);
-            _ = typeof(YooAsset.WebPlayModeUpdatePackageManifestOperation);
-            _ = typeof(YooAsset.UpdatePackageVersionOperation);
-            _ = typeof(YooAsset.EditorPlayModeUpdatePackageVersionOperation);
-            _ = typeof(YooAsset.OfflinePlayModeUpdatePackageVersionOperation);
-            _ = typeof(YooAsset.HostPlayModeUpdatePackageVersionOperation);
-            _ = typeof(YooAsset.WebPlayModeUpdatePackageVersionOperation);
-            _ = typeof(YooAsset.PackageAsset);
-            _ = typeof(YooAsset.PackageBundle);
-            _ = typeof(YooAsset.PackageManifest);
-            _ = typeof(YooAsset.EditorSimulateModeHelper);
-            _ = typeof(YooAsset.EditorSimulateModeImpl);
-            _ = typeof(YooAsset.HostPlayModeImpl);
-            _ = typeof(YooAsset.OfflinePlayModeImpl);
-            _ = typeof(YooAsset.WebPlayModeImpl);
-            _ = typeof(YooAsset.ResourceAssist);
-            _ = typeof(YooAsset.ResourcePackage);
-            _ = typeof(YooAsset.IBuildinQueryServices);
-            _ = typeof(YooAsset.DecryptFileInfo);
-            _ = typeof(YooAsset.IDecryptionServices);
-            _ = typeof(YooAsset.DeliveryFileInfo);
-            _ = typeof(YooAsset.IDeliveryLoadServices);
-            _ = typeof(YooAsset.IDeliveryQueryServices);
-            _ = typeof(YooAsset.EncryptResult);
-            _ = typeof(YooAsset.EncryptFileInfo);
-            _ = typeof(YooAsset.IEncryptionServices);
-            _ = typeof(YooAsset.IRemoteServices);
-            _ = typeof(YooAsset.YooAssetSettings);
-            _ = typeof(YooAsset.YooAssetSettingsData);
-            _ = typeof(YooAsset.BufferReader);
-            _ = typeof(YooAsset.BufferWriter);
-            _ = typeof(YooAsset.SafeProxy);
-            _ = typeof(YooAsset.CRC32Algorithm);
-            _ = typeof(YooAsset.ILogger);
-            _ = typeof(YooAsset.YooLogger);
-            _ = typeof(YooAsset.PathUtility);
-            _ = typeof(YooAsset.StringUtility);
-            _ = typeof(YooAsset.FileUtility);
-            _ = typeof(YooAsset.HashUtility);
-            _ = typeof(YooAsset.YooAssetCroppingHelper);
-            _ = typeof(YooAsset.YooAssets);
-            _ = typeof(YooAsset.YooAssetsDriver);
-            _ = typeof(YooAsset.CacheManager.RecordWrapper);
-            _ = typeof(YooAsset.DownloaderBase.EStatus);
-            _ = typeof(YooAsset.BundleLoaderBase.EStatus);
-            _ = typeof(YooAsset.BundleInfo.ELoadMode);
-            _ = typeof(YooAsset.DownloaderOperation.OnDownloadOver);
-            _ = typeof(YooAsset.DownloaderOperation.OnDownloadProgress);
-            _ = typeof(YooAsset.DownloaderOperation.OnDownloadError);
-            _ = typeof(YooAsset.DownloaderOperation.OnStartDownloadFile);*/
+            _types = new[]
+            {
+                typeof(YooAsset.AllAssetsHandle),
+                typeof(YooAsset.ApplicationFootPrint),
+                typeof(YooAsset.AssetHandle),
+                typeof(YooAsset.AssetInfo),
+                typeof(YooAsset.AsyncOperationBase),
+                typeof(YooAsset.BufferReader),
+                typeof(YooAsset.BufferWriter),
+                typeof(YooAsset.BundledAllAssetsProvider),
+                typeof(YooAsset.BundledAssetProvider),
+                typeof(YooAsset.BundledRawFileProvider),
+                typeof(YooAsset.BundledSceneProvider),
+                typeof(YooAsset.BundledSubAssetsProvider),
+                typeof(YooAsset.BundleInfo),
+                typeof(YooAsset.CacheFileElement),
+                typeof(YooAsset.ClearAllBundleFilesImplOperation),
+                typeof(YooAsset.ClearAllBundleFilesOperation),
+                typeof(YooAsset.ClearUnusedBundleFilesImplOperation),
+                typeof(YooAsset.ClearUnusedBundleFilesOperation),
+                typeof(YooAsset.CompletedProvider),
+                typeof(YooAsset.CRC32Algorithm),
+                typeof(YooAsset.DatabaseAllAssetsProvider),
+                typeof(YooAsset.DatabaseAssetProvider),
+                typeof(YooAsset.DatabaseRawFileProvider),
+                typeof(YooAsset.DatabaseSceneProvider),
+                typeof(YooAsset.DatabaseSubAssetsProvider),
+                typeof(YooAsset.DBFSInitializeOperation),
+                typeof(YooAsset.DBFSLoadAssetBundleOperation),
+                typeof(YooAsset.DBFSLoadPackageManifestOperation),
+                typeof(YooAsset.DBFSLoadRawBundleOperation),
+                typeof(YooAsset.DBFSRequestPackageVersionOperation),
+                typeof(YooAsset.DCFSClearAllBundleFilesOperation),
+                typeof(YooAsset.DCFSClearUnusedBundleFilesOperation),
+                typeof(YooAsset.DCFSDownloadNormalFileOperation),
+                typeof(YooAsset.DCFSDownloadResumeFileOperation),
+                typeof(YooAsset.DCFSInitializeOperation),
+                typeof(YooAsset.DCFSLoadAssetBundleOperation),
+                typeof(YooAsset.DCFSLoadPackageManifestOperation),
+                typeof(YooAsset.DCFSLoadRawBundleOperation),
+                typeof(YooAsset.DCFSRequestPackageVersionOperation),
+                typeof(YooAsset.DebugBundleInfo),
+                typeof(YooAsset.DebugPackageData),
+                typeof(YooAsset.DebugProviderInfo),
+                typeof(YooAsset.DebugReport),
+                typeof(YooAsset.DecryptFileInfo),
+                typeof(YooAsset.DefaultBuildinFileCatalog),
+                typeof(YooAsset.DefaultBuildinFileCatalog.FileWrapper),
+                typeof(YooAsset.DefaultBuildinFileSystem),
+                typeof(YooAsset.DefaultBuildinFileSystem.FileWrapper),
+                typeof(YooAsset.DefaultBuildinFileSystemBuild),
+                typeof(YooAsset.DefaultBuildinFileSystemDefine),
+                typeof(YooAsset.DefaultCacheFileSystem),
+                typeof(YooAsset.DefaultCacheFileSystem.FileWrapper),
+                typeof(YooAsset.DefaultCacheFileSystemDefine),
+                typeof(YooAsset.DefaultDownloadFileOperation),
+                typeof(YooAsset.DefaultEditorFileSystem),
+                typeof(YooAsset.DefaultEditorFileSystemDefine),
+                typeof(YooAsset.DefaultUnpackFileSystem),
+                typeof(YooAsset.DefaultUnpackFileSystemDefine),
+                typeof(YooAsset.DefaultWebFileSystem),
+                typeof(YooAsset.DefaultWebFileSystem.FileWrapper),
+                typeof(YooAsset.DEFSInitializeOperation),
+                typeof(YooAsset.DEFSLoadBundleOperation),
+                typeof(YooAsset.DEFSLoadPackageManifestOperation),
+                typeof(YooAsset.DEFSRequestPackageVersionOperation),
+                typeof(YooAsset.DeserializeManifestOperation),
+                typeof(YooAsset.DestroyOperation),
+                typeof(YooAsset.DownloaderOperation),
+                typeof(YooAsset.DownloaderOperation.OnDownloadError),
+                typeof(YooAsset.DownloaderOperation.OnDownloadOver),
+                typeof(YooAsset.DownloaderOperation.OnDownloadProgress),
+                typeof(YooAsset.DownloaderOperation.OnStartDownloadFile),
+                typeof(YooAsset.DownloadHandlerAssetBundleOperation),
+                typeof(YooAsset.DownloadHandlerFileRange),
+                typeof(YooAsset.DownloadPackageHashOperation),
+                typeof(YooAsset.DownloadPackageManifestOperation),
+                typeof(YooAsset.DownloadParam),
+                typeof(YooAsset.DownloadStatus),
+                typeof(YooAsset.DownloadSystemHelper),
+                typeof(YooAsset.DWFSInitializeOperation),
+                typeof(YooAsset.DWFSLoadAssetBundleOperation),
+                typeof(YooAsset.DWFSLoadPackageManifestOperation),
+                typeof(YooAsset.DWFSRequestPackageVersionOperation),
+                typeof(YooAsset.EDefaultBuildPipeline),
+                typeof(YooAsset.EditorSimulateModeHelper),
+                typeof(YooAsset.EditorSimulateModeImpl),
+                typeof(YooAsset.EditorSimulateModeInitializationOperation),
+                typeof(YooAsset.EditorSimulateModeParameters),
+                typeof(YooAsset.EditorSimulateModePreDownloadContentOperation),
+                typeof(YooAsset.EFileVerifyLevel),
+                typeof(YooAsset.EFileVerifyResult),
+                typeof(YooAsset.EncryptFileInfo),
+                typeof(YooAsset.EncryptResult),
+                typeof(YooAsset.EOperationStatus),
+                typeof(YooAsset.EPlayMode),
+                typeof(YooAsset.ERemoteCommand),
+                typeof(YooAsset.FileSystemHelper),
+                typeof(YooAsset.FileSystemParameters),
+                typeof(YooAsset.FileSystemParametersDefine),
+                typeof(YooAsset.FileUtility),
+                typeof(YooAsset.FSClearAllBundleFilesCompleteOperation),
+                typeof(YooAsset.FSClearAllBundleFilesOperation),
+                typeof(YooAsset.FSClearUnusedBundleFilesCompleteOperation),
+                typeof(YooAsset.FSClearUnusedBundleFilesOperation),
+                typeof(YooAsset.FSDownloadFileOperation),
+                typeof(YooAsset.FSInitializeFileSystemOperation),
+                typeof(YooAsset.FSLoadBundleOperation),
+                typeof(YooAsset.FSLoadPackageManifestOperation),
+                typeof(YooAsset.FSRequestPackageVersionOperation),
+                typeof(YooAsset.GameAsyncOperation),
+                typeof(YooAsset.HandleBase),
+                typeof(YooAsset.HashUtility),
+                typeof(YooAsset.HostPlayModeImpl),
+                typeof(YooAsset.HostPlayModeInitializationOperation),
+                typeof(YooAsset.HostPlayModeParameters),
+                typeof(YooAsset.HostPlayModePreDownloadContentOperation),
+                typeof(YooAsset.IBundleQuery),
+                typeof(YooAsset.IDecryptionServices),
+                typeof(YooAsset.IEncryptionServices),
+                typeof(YooAsset.IFileSystem),
+                typeof(YooAsset.ILogger),
+                typeof(YooAsset.InitializationOperation),
+                typeof(YooAsset.InitializeParameters),
+                typeof(YooAsset.InstantiateOperation),
+                typeof(YooAsset.IPlayMode),
+                typeof(YooAsset.IRemoteServices),
+                typeof(YooAsset.LoadBuildinCatalogFileOperation),
+                typeof(YooAsset.LoadBuildinPackageManifestOperation),
+                typeof(YooAsset.LoadBundleFileOperation),
+                typeof(YooAsset.LoadCachePackageHashOperation),
+                typeof(YooAsset.LoadCachePackageManifestOperation),
+                typeof(YooAsset.LoadDependBundleFileOperation),
+                typeof(YooAsset.LoadEditorPackageHashOperation),
+                typeof(YooAsset.LoadEditorPackageManifestOperation),
+                typeof(YooAsset.LoadEditorPackageVersionOperation),
+                typeof(YooAsset.LoadWebCatalogFileOperation),
+                typeof(YooAsset.LoadWebPackageManifestOperation),
+                typeof(YooAsset.ManifestTools),
+                typeof(YooAsset.OfflinePlayModeImpl),
+                typeof(YooAsset.OfflinePlayModeInitializationOperation),
+                typeof(YooAsset.OfflinePlayModeParameters),
+                typeof(YooAsset.OfflinePlayModePreDownloadContentOperation),
+                typeof(YooAsset.OperationSystem),
+                typeof(YooAsset.PackageAsset),
+                typeof(YooAsset.PackageBundle),
+                typeof(YooAsset.PackageManifest),
+                typeof(YooAsset.PathUtility),
+                typeof(YooAsset.PlayModeHelper),
+                typeof(YooAsset.PreDownloadContentOperation),
+                typeof(YooAsset.ProviderOperation),
+                typeof(YooAsset.RawBundle),
+                typeof(YooAsset.RawFileHandle),
+                typeof(YooAsset.RemoteCommand),
+                typeof(YooAsset.RemoteDebuggerDefine),
+                typeof(YooAsset.RemoteDebuggerInRuntime),
+                typeof(YooAsset.RequestBuildinPackageHashOperation),
+                typeof(YooAsset.RequestBuildinPackageVersionOperation),
+                typeof(YooAsset.RequestPackageVersionImplOperation),
+                typeof(YooAsset.RequestPackageVersionOperation),
+                typeof(YooAsset.RequestRemotePackageVersionOperation),
+                typeof(YooAsset.RequestWebPackageHashOperation),
+                typeof(YooAsset.RequestWebPackageVersionOperation),
+                typeof(YooAsset.ResourceDownloaderOperation),
+                typeof(YooAsset.ResourceImporterOperation),
+                typeof(YooAsset.ResourceManager),
+                typeof(YooAsset.ResourcePackage),
+                typeof(YooAsset.ResourceUnpackerOperation),
+                typeof(YooAsset.SafeProxy),
+                typeof(YooAsset.SceneHandle),
+                typeof(YooAsset.SearchCacheFilesOperation),
+                typeof(YooAsset.SimulateBuildResult),
+                typeof(YooAsset.StringUtility),
+                typeof(YooAsset.SubAssetsHandle),
+                typeof(YooAsset.TempFileElement),
+                typeof(YooAsset.ThreadSyncContext),
+                typeof(YooAsset.UnityWebDataRequestOperation),
+                typeof(YooAsset.UnityWebFileRequestOperation),
+                typeof(YooAsset.UnityWebRequestDelegate),
+                typeof(YooAsset.UnityWebRequestOperation),
+                typeof(YooAsset.UnityWebTextRequestOperation),
+                typeof(YooAsset.UnloadAllAssetsOperation),
+                typeof(YooAsset.UnloadSceneOperation),
+                typeof(YooAsset.UnloadUnusedAssetsOperation),
+                typeof(YooAsset.UpdatePackageManifestImplOperation),
+                typeof(YooAsset.UpdatePackageManifestOperation),
+                typeof(YooAsset.VerifyCacheFilesOperation),
+                typeof(YooAsset.VerifyTempFileOperation),
+                typeof(YooAsset.WebPlayModeImpl),
+                typeof(YooAsset.WebPlayModeInitializationOperation),
+                typeof(YooAsset.WebPlayModeParameters),
+                typeof(YooAsset.WebPlayModePreDownloadContentOperation),
+                typeof(YooAsset.WebRequestCounter),
+                typeof(YooAsset.YooAssetCroppingHelper),
+                typeof(YooAsset.YooAssets),
+                typeof(YooAsset.YooAssetsDriver),
+                typeof(YooAsset.YooAssetSettings),
+                typeof(YooAsset.YooAssetSettingsData),
+                typeof(YooAsset.YooLogger),
+            };
         }
     }
 }
