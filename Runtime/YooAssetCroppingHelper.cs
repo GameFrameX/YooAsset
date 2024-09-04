@@ -65,7 +65,6 @@ namespace YooAsset
                 typeof(YooAsset.DefaultBuildinFileCatalog.FileWrapper),
                 typeof(YooAsset.DefaultBuildinFileSystem),
                 typeof(YooAsset.DefaultBuildinFileSystem.FileWrapper),
-                typeof(YooAsset.DefaultBuildinFileSystemBuild),
                 typeof(YooAsset.DefaultBuildinFileSystemDefine),
                 typeof(YooAsset.DefaultCacheFileSystem),
                 typeof(YooAsset.DefaultCacheFileSystem.FileWrapper),
