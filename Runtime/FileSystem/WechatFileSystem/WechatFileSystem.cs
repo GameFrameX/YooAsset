@@ -10,7 +10,7 @@ public static class WechatFileSystemCreater
     {
         string fileSystemClass = typeof(WechatFileSystem).FullName;
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
         return fileSystemParams;
     }
 
@@ -19,7 +19,7 @@ public static class WechatFileSystemCreater
         string fileSystemClass = typeof(WechatFileSystem).FullName;
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
         IRemoteServices remoteServices = new WechatFileSystem.WebRemoteServices(buildinPackRoot);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
         return fileSystemParams;
     }
 }
@@ -39,10 +39,12 @@ internal class WechatFileSystem : IFileSystem
         {
             _webPackageRoot = buildinPackRoot;
         }
+
         string IRemoteServices.GetRemoteMainURL(string fileName)
         {
             return GetFileLoadURL(fileName);
         }
+
         string IRemoteServices.GetRemoteFallbackURL(string fileName)
         {
             return GetFileLoadURL(fileName);
@@ -56,6 +58,7 @@ internal class WechatFileSystem : IFileSystem
                 url = DownloadSystemHelper.ConvertToWWWPath(filePath);
                 _mapping.Add(fileName, url);
             }
+
             return url;
         }
     }
@@ -74,10 +77,7 @@ internal class WechatFileSystem : IFileSystem
     /// </summary>
     public string FileRoot
     {
-        get
-        {
-            return _fileCacheRoot;
-        }
+        get { return _fileCacheRoot; }
     }
 
     /// <summary>
@@ -85,53 +85,58 @@ internal class WechatFileSystem : IFileSystem
     /// </summary>
     public int FileCount
     {
-        get
-        {
-            return 0;
-        }
+        get { return 0; }
     }
 
     #region 自定义参数
+
     /// <summary>
     /// 自定义参数：远程服务接口
     /// </summary>
     public IRemoteServices RemoteServices { private set; get; } = null;
+
     #endregion
 
 
     public WechatFileSystem()
     {
     }
+
     public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
     {
         var operation = new WXFSInitializeOperation(this);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
     {
         var operation = new WXFSLoadPackageManifestOperation(this, packageVersion, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
     {
         var operation = new WXFSRequestPackageVersionOperation(this, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSClearAllBundleFilesOperation ClearAllBundleFilesAsync()
     {
         var operation = new FSClearAllBundleFilesCompleteOperation();
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSClearUnusedBundleFilesOperation ClearUnusedBundleFilesAsync(PackageManifest manifest)
     {
         var operation = new FSClearUnusedBundleFilesCompleteOperation();
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
     {
         param.MainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
@@ -140,22 +145,26 @@ internal class WechatFileSystem : IFileSystem
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)
     {
         var operation = new WXFSLoadBundleOperation(this, bundle);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual void UnloadBundleFile(PackageBundle bundle, object result)
     {
         AssetBundle assetBundle = result as AssetBundle;
         if (assetBundle != null)
+        {
             assetBundle.WXUnload(true);
+        }
     }
 
     public virtual void SetParameter(string name, object value)
     {
-        if (name == "REMOTE_SERVICES")
+        if (name == FileSystemParametersDefine.REMOTE_SERVICES)
         {
             RemoteServices = (IRemoteServices)value;
         }
@@ -164,6 +173,7 @@ internal class WechatFileSystem : IFileSystem
             YooLogger.Warning($"Invalid parameter : {name}");
         }
     }
+
     public virtual void OnCreate(string packageName, string rootDirectory)
     {
         PackageName = packageName;
@@ -178,6 +188,7 @@ internal class WechatFileSystem : IFileSystem
         _fileSystemManager = WX.GetFileSystemManager();
         _fileCacheRoot = WX.env.USER_DATA_PATH; //注意：如果有子目录，请修改此处！
     }
+
     public virtual void OnUpdate()
     {
     }
@@ -186,23 +197,29 @@ internal class WechatFileSystem : IFileSystem
     {
         return true;
     }
+
     public virtual bool Exists(PackageBundle bundle)
     {
         string filePath = GetCacheFileLoadPath(bundle);
         string result = _fileSystemManager.AccessSync(filePath);
         return result.Equals("access:ok");
     }
+
     public virtual bool NeedDownload(PackageBundle bundle)
     {
         if (Belong(bundle) == false)
+        {
             return false;
+        }
 
         return Exists(bundle) == false;
     }
+
     public virtual bool NeedUnpack(PackageBundle bundle)
     {
         return false;
     }
+
     public virtual bool NeedImport(PackageBundle bundle)
     {
         return false;
@@ -212,12 +229,14 @@ internal class WechatFileSystem : IFileSystem
     {
         throw new System.NotImplementedException();
     }
+
     public virtual string ReadFileText(PackageBundle bundle)
     {
         throw new System.NotImplementedException();
     }
 
     #region 内部方法
+
     private string GetCacheFileLoadPath(PackageBundle bundle)
     {
         if (_cacheFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
@@ -225,8 +244,10 @@ internal class WechatFileSystem : IFileSystem
             filePath = PathUtility.Combine(_fileCacheRoot, bundle.FileName);
             _cacheFilePaths.Add(bundle.BundleGUID, filePath);
         }
+
         return filePath;
     }
+
     #endregion
 }
 #endif
