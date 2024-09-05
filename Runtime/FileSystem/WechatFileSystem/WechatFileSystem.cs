@@ -158,7 +158,7 @@ internal class WechatFileSystem : IFileSystem
         AssetBundle assetBundle = result as AssetBundle;
         if (assetBundle != null)
         {
-            assetBundle.WXUnload(true);
+            assetBundle.Unload(true);
         }
     }
 

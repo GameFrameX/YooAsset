@@ -1,8 +1,6 @@
 ﻿#if UNITY_WEBGL && WECHAT_MINI_GAME
-using UnityEngine;
 using UnityEngine.Networking;
 using YooAsset;
-using WeChatWASM;
 
 internal class WXFSLoadBundleOperation : FSLoadBundleOperation
 {
@@ -23,21 +21,25 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
         _fileSystem = fileSystem;
         _bundle = bundle;
     }
+
     internal override void InternalOnStart()
     {
         _steps = ESteps.LoadBundleFile;
     }
+
     internal override void InternalOnUpdate()
     {
         if (_steps == ESteps.None || _steps == ESteps.Done)
+        {
             return;
+        }
 
         if (_steps == ESteps.LoadBundleFile)
         {
             if (_webRequest == null)
             {
                 string mainURL = _fileSystem.RemoteServices.GetRemoteMainURL(_bundle.FileName);
-                _webRequest = WXAssetBundle.GetAssetBundle(mainURL);
+                _webRequest = UnityWebRequestAssetBundle.GetAssetBundle(mainURL);
                 _webRequest.SendWebRequest();
             }
 
@@ -45,12 +47,16 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
             DownloadedBytes = (long)_webRequest.downloadedBytes;
             Progress = DownloadProgress;
             if (_webRequest.isDone == false)
+            {
                 return;
+            }
 
             if (CheckRequestResult())
             {
                 _steps = ESteps.Done;
-                Result = (_webRequest.downloadHandler as DownloadHandlerWXAssetBundle).assetBundle;
+                Result = (_webRequest.downloadHandler as DownloadHandlerAssetBundle)?.assetBundle;
+
+
                 Status = EOperationStatus.Succeed;
             }
             else
@@ -60,6 +66,7 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
             }
         }
     }
+
     internal override void InternalWaitForAsyncComplete()
     {
         if (_steps != ESteps.Done)
@@ -70,6 +77,7 @@ internal class WXFSLoadBundleOperation : FSLoadBundleOperation
             UnityEngine.Debug.LogError(Error);
         }
     }
+
     public override void AbortDownloadOperation()
     {
     }

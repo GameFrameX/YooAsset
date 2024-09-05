@@ -13,10 +13,12 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
     {
         _fileSystem = fileSystem;
     }
+
     internal override void InternalOnStart()
     {
         _steps = ESteps.CreateRequest;
     }
+
     internal override void InternalOnUpdate()
     {
         // 创建下载器
@@ -84,11 +86,12 @@ internal class WXFSDownloadFileOperation : DefaultDownloadFileOperation
 
     private void CreateWebRequest()
     {
-        _webRequest = WXAssetBundle.GetAssetBundle(_requestURL);
+        _webRequest = UnityWebRequestAssetBundle.GetAssetBundle(_requestURL);
         _webRequest.SetRequestHeader("wechatminigame-preload", "1");
         _webRequest.disposeDownloadHandlerOnDispose = true;
         _webRequest.SendWebRequest();
     }
+
     private void DisposeWebRequest()
     {
         if (_webRequest != null)
