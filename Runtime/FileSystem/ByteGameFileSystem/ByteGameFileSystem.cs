@@ -10,7 +10,7 @@ public static class ByteGameFileSystemCreater
     {
         string fileSystemClass = typeof(ByteGameFileSystem).FullName;
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
         return fileSystemParams;
     }
 
@@ -19,7 +19,7 @@ public static class ByteGameFileSystemCreater
         string fileSystemClass = typeof(ByteGameFileSystem).FullName;
         IRemoteServices remoteServices = new ByteGameFileSystem.WebRemoteServices(buildinPackRoot);
         var fileSystemParams = new FileSystemParameters(fileSystemClass, null);
-        fileSystemParams.AddParameter("REMOTE_SERVICES", remoteServices);
+        fileSystemParams.AddParameter(FileSystemParametersDefine.REMOTE_SERVICES, remoteServices);
         return fileSystemParams;
     }
 }
@@ -30,7 +30,7 @@ public static class ByteGameFileSystemCreater
 /// </summary>
 internal class ByteGameFileSystem : IFileSystem
 {
-    public class WebRemoteServices : IRemoteServices
+    public sealed class WebRemoteServices : IRemoteServices
     {
         private readonly string _webPackageRoot;
         protected readonly Dictionary<string, string> _mapping = new Dictionary<string, string>(10000);
@@ -39,10 +39,12 @@ internal class ByteGameFileSystem : IFileSystem
         {
             _webPackageRoot = buildinPackRoot;
         }
+
         string IRemoteServices.GetRemoteMainURL(string fileName)
         {
             return GetFileLoadURL(fileName);
         }
+
         string IRemoteServices.GetRemoteFallbackURL(string fileName)
         {
             return GetFileLoadURL(fileName);
@@ -56,6 +58,7 @@ internal class ByteGameFileSystem : IFileSystem
                 url = DownloadSystemHelper.ConvertToWWWPath(filePath);
                 _mapping.Add(fileName, url);
             }
+
             return url;
         }
     }
@@ -73,10 +76,7 @@ internal class ByteGameFileSystem : IFileSystem
     /// </summary>
     public string FileRoot
     {
-        get
-        {
-            return string.Empty;
-        }
+        get { return string.Empty; }
     }
 
     /// <summary>
@@ -84,53 +84,54 @@ internal class ByteGameFileSystem : IFileSystem
     /// </summary>
     public int FileCount
     {
-        get
-        {
-            return 0;
-        }
+        get { return 0; }
     }
 
     #region 自定义参数
+
     /// <summary>
     /// 自定义参数：远程服务接口
     /// </summary>
     public IRemoteServices RemoteServices { private set; get; } = null;
+
     #endregion
 
 
-    public ByteGameFileSystem()
-    {
-    }
     public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
     {
         var operation = new BGFSInitializeOperation(this);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSLoadPackageManifestOperation LoadPackageManifestAsync(string packageVersion, int timeout)
     {
         var operation = new BGFSLoadPackageManifestOperation(this, packageVersion, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSRequestPackageVersionOperation RequestPackageVersionAsync(bool appendTimeTicks, int timeout)
     {
         var operation = new BGFSRequestPackageVersionOperation(this, timeout);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSClearAllBundleFilesOperation ClearAllBundleFilesAsync()
     {
         var operation = new FSClearAllBundleFilesCompleteOperation();
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSClearUnusedBundleFilesOperation ClearUnusedBundleFilesAsync(PackageManifest manifest)
     {
         var operation = new FSClearUnusedBundleFilesCompleteOperation();
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSDownloadFileOperation DownloadFileAsync(PackageBundle bundle, DownloadParam param)
     {
         param.MainURL = RemoteServices.GetRemoteMainURL(bundle.FileName);
@@ -139,22 +140,26 @@ internal class ByteGameFileSystem : IFileSystem
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual FSLoadBundleOperation LoadBundleFile(PackageBundle bundle)
     {
         var operation = new BGFSLoadBundleOperation(this, bundle);
         OperationSystem.StartOperation(PackageName, operation);
         return operation;
     }
+
     public virtual void UnloadBundleFile(PackageBundle bundle, object result)
     {
         AssetBundle assetBundle = result as AssetBundle;
         if (assetBundle != null)
+        {
             assetBundle.Unload(true);
+        }
     }
 
     public virtual void SetParameter(string name, object value)
     {
-        if (name == "REMOTE_SERVICES")
+        if (name == FileSystemParametersDefine.REMOTE_SERVICES)
         {
             RemoteServices = (IRemoteServices)value;
         }
@@ -163,6 +168,7 @@ internal class ByteGameFileSystem : IFileSystem
             YooLogger.Warning($"Invalid parameter : {name}");
         }
     }
+
     public virtual void OnCreate(string packageName, string rootDirectory)
     {
         PackageName = packageName;
@@ -176,6 +182,7 @@ internal class ByteGameFileSystem : IFileSystem
 
         _fileSystemManager = StarkSDK.API.GetStarkFileSystemManager();
     }
+
     public virtual void OnUpdate()
     {
     }
@@ -184,22 +191,28 @@ internal class ByteGameFileSystem : IFileSystem
     {
         return true;
     }
+
     public virtual bool Exists(PackageBundle bundle)
     {
         string filePath = GetCacheFileLoadPath(bundle);
         return _fileSystemManager.AccessSync(filePath);
     }
+
     public virtual bool NeedDownload(PackageBundle bundle)
     {
         if (Belong(bundle) == false)
+        {
             return false;
+        }
 
         return Exists(bundle) == false;
     }
+
     public virtual bool NeedUnpack(PackageBundle bundle)
     {
         return false;
     }
+
     public virtual bool NeedImport(PackageBundle bundle)
     {
         return false;
@@ -209,12 +222,14 @@ internal class ByteGameFileSystem : IFileSystem
     {
         throw new System.NotImplementedException();
     }
+
     public virtual string ReadFileText(PackageBundle bundle)
     {
         throw new System.NotImplementedException();
     }
-    
+
     #region 内部方法
+
     private string GetCacheFileLoadPath(PackageBundle bundle)
     {
         if (_cacheFilePaths.TryGetValue(bundle.BundleGUID, out string filePath) == false)
@@ -222,8 +237,10 @@ internal class ByteGameFileSystem : IFileSystem
             filePath = _fileSystemManager.GetLocalCachedPathForUrl(bundle.FileName);
             _cacheFilePaths.Add(bundle.BundleGUID, filePath);
         }
+
         return filePath;
     }
+
     #endregion
 }
 #endif

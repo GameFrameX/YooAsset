@@ -17,6 +17,31 @@ namespace YooAsset
         {
             _types = new[]
             {
+#if UNITY_WEBGL && DOUYIN_MINI_GAME
+                typeof(ByteGameFileSystem),
+                typeof(ByteGameFileSystemCreater),
+                typeof(BGFSRequestPackageVersionOperation),
+                typeof(BGFSLoadPackageManifestOperation),
+                typeof(BGFSLoadBundleOperation),
+                typeof(BGFSInitializeOperation),
+                typeof(BGFSDownloadFileOperation),
+                typeof(RequestByteGamePackageVersionOperation),
+                typeof(RequestByteGamePackageHashOperation),
+                typeof(LoadByteGamePackageManifestOperation),
+#endif
+                
+#if UNITY_WEBGL && WECHAT_MINI_GAME
+                typeof(WechatFileSystem),
+                typeof(WechatFileSystemCreater),
+                typeof(WXFSRequestPackageVersionOperation),
+                typeof(WXFSLoadPackageManifestOperation),
+                typeof(WXFSLoadBundleOperation),
+                typeof(WXFSInitializeOperation),
+                typeof(WXFSDownloadFileOperation),
+                typeof(RequestWechatPackageVersionOperation),
+                typeof(RequestWechatPackageHashOperation),
+                typeof(LoadWechatPackageManifestOperation),
+#endif
                 typeof(YooAsset.AllAssetsHandle),
                 typeof(YooAsset.ApplicationFootPrint),
                 typeof(YooAsset.AssetHandle),
