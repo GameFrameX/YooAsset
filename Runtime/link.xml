@@ -4,8 +4,7 @@
         <type fullname="YooAsset.AssetHandle" preserve="all"/>
         <type fullname="YooAsset.HandleBase" preserve="all"/>
         <type fullname="YooAsset.RawFileHandle" preserve="all"/>
-        <type fullname="YooAsset.SceneHandle" preserve="all"/>
-        
+        <type fullname="YooAsset.SceneHandle" preserve="all"/>        
         <type fullname="YooAsset.ByteGameFileSystem" preserve="all"/>
         <type fullname="YooAsset.ByteGameFileSystemCreater" preserve="all"/>
         <type fullname="YooAsset.BGFSRequestPackageVersionOperation" preserve="all"/>
@@ -16,7 +15,6 @@
         <type fullname="YooAsset.RequestByteGamePackageVersionOperation" preserve="all"/>
         <type fullname="YooAsset.RequestByteGamePackageHashOperation" preserve="all"/>
         <type fullname="YooAsset.LoadByteGamePackageManifestOperation" preserve="all"/>
-
         <type fullname="YooAsset.WechatFileSystem" preserve="all"/>
         <type fullname="YooAsset.WechatFileSystemCreater" preserve="all"/>
         <type fullname="YooAsset.WXFSRequestPackageVersionOperation" preserve="all"/>
@@ -27,7 +25,6 @@
         <type fullname="YooAsset.RequestWechatPackageVersionOperation" preserve="all"/>
         <type fullname="YooAsset.RequestWechatPackageHashOperation" preserve="all"/>
         <type fullname="YooAsset.LoadWechatPackageManifestOperation" preserve="all"/>
-
         <type fullname="YooAsset.AllAssetsHandle" preserve="all"/>
         <type fullname="YooAsset.ApplicationFootPrint" preserve="all"/>
         <type fullname="YooAsset.AssetHandle" preserve="all"/>

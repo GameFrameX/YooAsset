@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 using StarkSDKSpace;
+using UnityEngine.Scripting;
 
 public static class ByteGameFileSystemCreater
 {
@@ -96,6 +97,11 @@ internal class ByteGameFileSystem : IFileSystem
 
     #endregion
 
+    [Preserve]
+    public ByteGameFileSystem()
+    {
+        PackageName = string.Empty;
+    }
 
     public virtual FSInitializeFileSystemOperation InitializeFileSystemAsync()
     {
